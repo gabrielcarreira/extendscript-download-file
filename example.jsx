@@ -1,4 +1,4 @@
-// @include "download-file.jsx"
+// @include "FileDownloader.jsx"
 
 try {
   var downloader = new FileDownloader();

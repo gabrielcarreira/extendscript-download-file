@@ -4,21 +4,45 @@
  */
 function FileDownloader() {
   // Default download folder
-  this.defaultDownloadPath = "~/Downloads/es-download-file";
+  this.defaultDownloadPath = "~/Downloads/es-file-downloader";
   this.downloadFolder = null;
 
   // Supported file extensions for validation (optional)
   this.supportedExtensions = {
     // Images
-    jpg: true, jpeg: true, png: true, gif: true, bmp: true, tiff: true, webp: true,
+    jpg: true,
+    jpeg: true,
+    png: true,
+    gif: true,
+    bmp: true,
+    tiff: true,
+    webp: true,
     // Video
-    mp4: true, mov: true, avi: true, wmv: true, flv: true, webm: true,
+    mp4: true,
+    mov: true,
+    avi: true,
+    wmv: true,
+    flv: true,
+    webm: true,
     // Audio
-    mp3: true, wav: true, aac: true, ogg: true,
+    mp3: true,
+    wav: true,
+    aac: true,
+    ogg: true,
     // Documents
-    pdf: true, doc: true, docx: true, xls: true, xlsx: true, txt: true, csv: true,
+    pdf: true,
+    doc: true,
+    docx: true,
+    xls: true,
+    xlsx: true,
+    txt: true,
+    csv: true,
     // Adobe specific
-    psd: true, ai: true, aep: true, prproj: true, aet: true
+    psd: true,
+    ai: true,
+    aep: true,
+    prproj: true,
+    aet: true,
   };
 }
 
@@ -26,23 +50,23 @@ function FileDownloader() {
  * Gets file extension from filename
  * @private
  */
-FileDownloader.prototype._getExtension = function(fileName) {
+FileDownloader.prototype._getExtension = function (fileName) {
   var ext = "";
   var foundDot = false;
-  
-  for(var i = fileName.length - 1; i >= 0; i--) {
-    if(fileName[i] == ".") {
+
+  for (var i = fileName.length - 1; i >= 0; i--) {
+    if (fileName[i] == ".") {
       foundDot = true;
       break;
     }
     ext = fileName[i] + ext;
   }
 
-  if(foundDot) {
+  if (foundDot) {
     var result = "";
-    for(var j = 0; j < ext.length; j++) {
+    for (var j = 0; j < ext.length; j++) {
       var c = ext[j];
-      if(c >= "A" && c <= "Z") {
+      if (c >= "A" && c <= "Z") {
         c = String.fromCharCode(c.charCodeAt(0) + 32);
       }
       result = result + c;
@@ -50,7 +74,7 @@ FileDownloader.prototype._getExtension = function(fileName) {
     return result;
   }
   return "";
-}
+};
 
 /**
  * Validates if the file extension is supported
@@ -59,7 +83,7 @@ FileDownloader.prototype._getExtension = function(fileName) {
  */
 FileDownloader.prototype.isValidFileType = function (fileName) {
   if (!fileName) return false;
-  
+
   var ext = this._getExtension(fileName);
   if (!ext) return false;
 
@@ -73,36 +97,36 @@ FileDownloader.prototype.isValidFileType = function (fileName) {
  */
 FileDownloader.prototype.sanitizeFileName = function (fileName) {
   var result = "";
-  
-  for(var i = 0; i < fileName.length; i++) {
+
+  for (var i = 0; i < fileName.length; i++) {
     var c = fileName[i];
     var isValid = false;
 
     // Check numbers
-    if(c >= "0" && c <= "9") {
+    if (c >= "0" && c <= "9") {
       isValid = true;
     }
     // Check lowercase letters
-    if(c >= "a" && c <= "z") {
+    if (c >= "a" && c <= "z") {
       isValid = true;
     }
     // Check uppercase letters
-    if(c >= "A" && c <= "Z") {
+    if (c >= "A" && c <= "Z") {
       isValid = true;
     }
     // Check special chars
-    if(c == "-" || c == "_" || c == ".") {
+    if (c == "-" || c == "_" || c == ".") {
       isValid = true;
     }
 
-    if(isValid) {
+    if (isValid) {
       result = result + c;
     }
-    if(!isValid) {
+    if (!isValid) {
       result = result + "_";
     }
   }
-  
+
   return result;
 };
 
@@ -173,8 +197,14 @@ FileDownloader.prototype.downloadFile = function (url, fileName, options) {
 
   // Build curl command with additional options for better reliability
   var command =
-    'curl -L -o "' + downloadPath + "\\" + fileName + '" "' + url + '"' +
-    ' --retry 3 --retry-delay 2 --connect-timeout 30';
+    'curl -L -o "' +
+    downloadPath +
+    "\\" +
+    fileName +
+    '" "' +
+    url +
+    '"' +
+    " --retry 3 --retry-delay 2 --connect-timeout 30";
 
   try {
     system.callSystem(command);
