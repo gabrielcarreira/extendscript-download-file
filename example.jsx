@@ -3,25 +3,48 @@
 try {
   var downloader = new FileDownloader();
 
-  // Example with default folder
-  var file = downloader.downloadFile(
-    "https://res.cloudinary.com/dvyhc5pp5/image/upload/v1727990308/note2.png",
-    "example1.png"
+  // Example 1: Basic image download
+  var imageFile = downloader.downloadFile(
+    "https://example.com/image.jpg",
+    "example1.jpg"
   );
 
-  if (file && file.exists) {
-    alert("File downloaded successfully: " + file.path);
+  if (imageFile && imageFile.exists) {
+    alert("Image downloaded successfully: " + imageFile.path);
   }
 
-  // Example with custom folder
+  // Example 2: Download with custom folder
   downloader.initializeDownloadFolder("~/Documents/custom-downloads");
-  var file2 = downloader.downloadFile(
-    "https://res.cloudinary.com/dvyhc5pp5/image/upload/v1727990308/note2.png",
-    "example2.png"
+  
+  var pdfFile = downloader.downloadFile(
+    "https://example.com/document.pdf",
+    "example2.pdf"
   );
 
-  if (file2 && file2.exists) {
-    alert("Second file downloaded successfully: " + file2.path);
+  if (pdfFile && pdfFile.exists) {
+    alert("PDF downloaded successfully: " + pdfFile.path);
+  }
+
+  // Example 3: Download without file type validation
+  var customFile = downloader.downloadFile(
+    "https://example.com/custom.xyz",
+    "custom_file.xyz",
+    { validateFileType: false }
+  );
+
+  if (customFile && customFile.exists) {
+    alert("Custom file downloaded successfully: " + customFile.path);
+  }
+
+  // Example 4: Download with file name sanitization
+  var fileWithSpaces = downloader.downloadFile(
+    "https://example.com/filewithspaces.txt",
+    "file with spaces.txt",
+    { sanitizeFileName: true }
+  );
+
+  if (fileWithSpaces && fileWithSpaces.exists) {
+    alert("Sanitized file downloaded successfully: " + fileWithSpaces.path);
   }
 } catch (e) {
   alert("Error: " + e.toString());
